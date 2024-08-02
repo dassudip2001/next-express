@@ -1,14 +1,20 @@
-import nodemailer from "nodemailer";
+import nodemailer, { TransportOptions } from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false, // Use `true` for port 465, `false` for all other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+interface CustomTransportOptions extends TransportOptions {
+  port: number;
+}
+
+const transporter: nodemailer.Transporter<unknown> = nodemailer.createTransport(
+  {
+    port: parseInt(process.env.SMTP_PORT || "0", 10),
+    host: process.env.SMTP_HOST,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  } as CustomTransportOptions
+);
 
 export const sendMail = async (to: string, subject: string, body: string) => {
   await transporter.sendMail({
