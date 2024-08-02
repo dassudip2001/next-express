@@ -1,3 +1,6 @@
 node_modules
 dist
 .env
+
+
+# https://github.com/TusharVashishth/clash/blob/main/server/src/index.ts

@@ -24,9 +24,18 @@ app.get("/", async (req: Request, res: Response) => {
     path.resolve(__dirname, `./views/emails/send.ejs`),
     { name: "John Doe" }
   );
-  await sendMail("sudip@gmail.com", "Test Email", html);
   // await sendMail("sudip@gmail.com", "Test Email", html);
+  // await sendMail("sudip@gmail.com", "Test Email", html);
+  await emailQueue.add(emailQueueName, {
+    to: "sudip@gmail.com",
+    subject: "Test Email",
+    body: "Hello World",
+  });
   return res.json({ message: "Email sent successfully" });
 });
+
+// queue
+import "./jobs/index.js";
+import { emailQueue, emailQueueName } from "./jobs/EmailJobs.js";
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
